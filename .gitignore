@@ -1,0 +1,4 @@
+*.o
+*~
+examples/use_ch5md
+examples/*.h5
