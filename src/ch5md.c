@@ -11,7 +11,7 @@
 #define MIN_CHUNK 10
 #define MAX_CHUNK 256
 
-hid_t h5md_create_file (const char *filename, const char *author, const char *creator, const char *creator_version)
+hid_t h5md_create_file (const char *filename, const char *author, const char *author_email, const char *creator, const char *creator_version)
 {
   hid_t file;
   hid_t g, g1;
@@ -29,6 +29,11 @@ hid_t h5md_create_file (const char *filename, const char *author, const char *cr
   a = H5Acreate(g1, "name", t, s, H5P_DEFAULT, H5P_DEFAULT);
   status = H5Awrite(a, t, &author);
   status = H5Aclose(a);
+  if (NULL!=author_email) {
+    a = H5Acreate(g1, "author_email", t, s, H5P_DEFAULT, H5P_DEFAULT);
+    status = H5Awrite(a, t, &author_email);
+    status = H5Aclose(a);
+  }
   status = H5Gclose(g1);
 
   g1 = H5Gcreate(g, "creator", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
