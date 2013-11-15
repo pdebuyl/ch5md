@@ -98,6 +98,32 @@ h5md_element h5md_create_time_data (hid_t loc, const char *name, int N, int D, h
 
 }
 
+h5md_element h5md_create_fixed_data_simple(hid_t loc, const char *name, int rank, int int_dims[], hid_t datatype, void *data)
+{
+
+  h5md_element fd;
+
+  hid_t spc;
+  hsize_t dims[H5S_MAX_RANK];
+  herr_t status;
+  int i;
+
+  for (i=0; i<rank; i++) {
+    dims[i] = int_dims[i];
+  }
+
+  spc = H5Screate_simple(rank, dims, NULL);
+  fd.value = H5Dcreate(loc, name, datatype, spc, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+  status = H5Sclose(spc);
+  status = H5Dwrite(fd.value, datatype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+  status = H5Dclose(fd.value);
+
+  fd.is_time = false;
+
+  return fd;
+
+}
+
 int h5md_extend_by_one(hid_t dset, hsize_t *dims) {
 
   hid_t file_space;
