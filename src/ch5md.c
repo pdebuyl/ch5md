@@ -16,10 +16,23 @@ hid_t h5md_create_file (const char *filename, const char *author, const char *au
   hid_t file;
   hid_t g, g1;
   hid_t a, s, t;
+  hsize_t dims[1];
   herr_t status;
+
+  int version[2];
+
+  version[0] = 1;
+  version[1] = 0;
 
   file = H5Fcreate(filename, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
   g = H5Gcreate(file, "h5md", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+
+  dims[0] = 2;
+  s = H5Screate_simple(1, dims, NULL);
+  a = H5Acreate(g, "version", H5T_NATIVE_INT, s, H5P_DEFAULT, H5P_DEFAULT);
+  status = H5Awrite(a, H5T_NATIVE_INT, version);
+  status = H5Aclose(a);
+  status = H5Sclose(s);
 
   s = H5Screate(H5S_SCALAR);
   t = H5Tcopy(H5T_C_S1);
