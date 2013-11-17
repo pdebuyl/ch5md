@@ -62,6 +62,49 @@ hid_t h5md_create_file (const char *filename, const char *author, const char *au
   return file;
 }
 
+hid_t h5md_open_file (const char *filename)
+{
+  hid_t file;
+  hid_t g;
+  hid_t a, s;
+  hsize_t dims[1];
+  int version[2];
+  int version_ok;
+
+  file = H5Fopen(filename,  H5F_ACC_RDWR, H5P_DEFAULT);
+
+  g = H5Gopen(file, "h5md", H5P_DEFAULT);
+
+  version_ok = false;
+  dims[0] = 2;
+  a = H5Aopen(g, "version", H5P_DEFAULT);
+  s = H5Aget_space(a);
+  if (!(H5Sis_simple(s)>0)) {
+    printf("H5MD version is not a simple dataspace");
+    H5Sclose(s);
+    H5Aclose(a);
+    H5Gclose(g);
+    H5Fclose(file);
+  } else {
+    if (H5Sget_simple_extent_ndims(s)==1) {
+      H5Sget_simple_extent_dims(s, dims, NULL);
+      if (dims[0]==2) {
+	H5Aread(a, H5T_NATIVE_INT, version);
+	if ( (version[0]==1) && (version[1]==0) ) {version_ok = true;}
+      }
+    }
+  }
+
+  H5Aclose(a);
+  H5Sclose(s);
+  H5Gclose(g);
+
+  if (!version_ok) H5Fclose(file);
+
+  return file;
+
+}
+
 h5md_element h5md_create_time_data (hid_t loc, const char *name, int N, int D, hid_t datatype)
 {
 
