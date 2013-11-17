@@ -25,6 +25,8 @@ int main(void) {
 
     vls_data = "Custom parameter value";
 
+    H5open();
+
     file = h5md_create_file("hop.h5", "Pierre de Buyl", NULL, "use_h5md", "N/A");
 
     grp = H5Gcreate(file, "particles", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
@@ -68,6 +70,8 @@ int main(void) {
     status = H5Tclose(vls_t);
 
     H5Fclose(file);
+
+    H5close();
 
     return 0;
 
