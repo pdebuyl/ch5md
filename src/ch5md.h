@@ -42,6 +42,7 @@ typedef struct {
   int version[2];
   hid_t particles;
   hid_t observables;
+  hid_t parameters;
 } h5md_file;
 
 h5md_file h5md_create_file (const char *filename, const char *author, const char *author_email, const char *creator, const char *creator_version);

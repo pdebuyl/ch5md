@@ -58,6 +58,7 @@ h5md_file h5md_create_file (const char *filename, const char *author, const char
 
   file.particles = H5Gcreate(file.id, "particles", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
   file.observables = H5Gcreate(file.id, "observables", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+  file.parameters = H5Gcreate(file.id, "parameters", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 
   return file;
 }
@@ -65,6 +66,7 @@ h5md_file h5md_create_file (const char *filename, const char *author, const char
 int h5md_close_file(h5md_file file) {
   H5Gclose(file.particles);
   H5Gclose(file.observables);
+  H5Gclose(file.parameters);
   H5Fclose(file.id);
 
   return 0;
@@ -174,6 +176,21 @@ h5md_element h5md_create_time_data (hid_t loc, const char *name, int N, int D, h
 
   return td;
 
+}
+
+int h5md_close_time_data(h5md_element e)
+{
+  herr_t status;
+
+  if (!e.is_time) return 0;
+
+  status = H5Dclose(e.step);
+  status = H5Dclose(e.time);
+  status = H5Dclose(e.value);
+  status = H5Gclose(e.group);
+
+  return 0;
+  
 }
 
 h5md_element h5md_create_fixed_data_simple(hid_t loc, const char *name, int rank, int int_dims[], hid_t datatype, void *data)

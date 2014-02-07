@@ -11,7 +11,6 @@
 int main(void) {
     h5md_file file;
     h5md_particles_group beads;
-    hid_t p_grp;
     hid_t vls_t;
     herr_t status;
 
@@ -31,7 +30,6 @@ int main(void) {
 
     beads = h5md_create_particles_group(file, "beads");
     
-    p_grp = H5Gcreate(file.id, "parameters", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     vls_t = H5Tcopy(H5T_C_S1);
     H5Tset_size(vls_t, H5T_VARIABLE);
 
@@ -54,7 +52,7 @@ int main(void) {
     i = 12345;
     h5md_create_fixed_data_scalar(file.observables, "scalar_dset", H5T_NATIVE_INT, &i);
 
-    h5md_create_fixed_data_scalar(p_grp, "custom_parameter", vls_t, &vls_data);
+    h5md_create_fixed_data_scalar(file.parameters, "custom_parameter", vls_t, &vls_data);
 
     // Update r in a loop and write data to the file.
     for (j=0;j<2;j++) {
@@ -62,9 +60,9 @@ int main(void) {
       h5md_append(beads.position, r, j+1, (double) j+1);
     }
 
-    status = H5Gclose(p_grp);
     status = H5Tclose(vls_t);
 
+    h5md_close_time_data(beads.position);
     h5md_close_file(file);
 
     H5close();
