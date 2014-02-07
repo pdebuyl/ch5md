@@ -11,26 +11,24 @@
 #define MIN_CHUNK 10
 #define MAX_CHUNK 256
 
-hid_t h5md_create_file (const char *filename, const char *author, const char *author_email, const char *creator, const char *creator_version)
+h5md_file h5md_create_file (const char *filename, const char *author, const char *author_email, const char *creator, const char *creator_version)
 {
-  hid_t file;
+  h5md_file file;
   hid_t g, g1;
   hid_t a, s, t;
   hsize_t dims[1];
   herr_t status;
 
-  int version[2];
+  file.version[0] = 1;
+  file.version[1] = 0;
 
-  version[0] = 1;
-  version[1] = 0;
-
-  file = H5Fcreate(filename, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
-  g = H5Gcreate(file, "h5md", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+  file.id = H5Fcreate(filename, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+  g = H5Gcreate(file.id, "h5md", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 
   dims[0] = 2;
   s = H5Screate_simple(1, dims, NULL);
   a = H5Acreate(g, "version", H5T_NATIVE_INT, s, H5P_DEFAULT, H5P_DEFAULT);
-  status = H5Awrite(a, H5T_NATIVE_INT, version);
+  status = H5Awrite(a, H5T_NATIVE_INT, file.version);
   status = H5Aclose(a);
   status = H5Sclose(s);
 
@@ -58,8 +56,18 @@ hid_t h5md_create_file (const char *filename, const char *author, const char *au
   status = H5Aclose(a);
   status = H5Gclose(g1);
 
+  file.particles = H5Gcreate(file.id, "particles", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+  file.observables = H5Gcreate(file.id, "observables", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 
   return file;
+}
+
+int h5md_close_file(h5md_file file) {
+  H5Gclose(file.particles);
+  H5Gclose(file.observables);
+  H5Fclose(file.id);
+
+  return 0;
 }
 
 hid_t h5md_open_file (const char *filename)

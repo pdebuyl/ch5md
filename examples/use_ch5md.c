@@ -9,9 +9,8 @@
 #include "ch5md.h"
 
 int main(void) {
-    hid_t file;
-    hid_t grp, b_grp, p_grp;
-    hid_t o_grp;
+    h5md_file file;
+    hid_t b_grp, p_grp;
     hid_t vls_t;
     herr_t status;
 
@@ -27,12 +26,10 @@ int main(void) {
 
     H5open();
 
-    file = h5md_create_file("hop.h5", "Pierre de Buyl", NULL, "use_h5md", "N/A");
+    file = h5md_create_file("data_use_ch5md.h5", "Pierre de Buyl", NULL, "use_h5md", "N/A");
 
-    grp = H5Gcreate(file, "particles", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-    b_grp = H5Gcreate(grp, "beads", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-    o_grp = H5Gcreate(file, "observables", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-    p_grp = H5Gcreate(file, "parameters", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    b_grp = H5Gcreate(file.particles, "beads", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    p_grp = H5Gcreate(file.id, "parameters", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     vls_t = H5Tcopy(H5T_C_S1);
     H5Tset_size(vls_t, H5T_VARIABLE);
 
@@ -53,7 +50,7 @@ int main(void) {
     // Create a scalar fixed-in-time dataset
     // Data is written immediately here
     i = 12345;
-    h5md_create_fixed_data_scalar(o_grp, "scalar_dset", H5T_NATIVE_INT, &i);
+    h5md_create_fixed_data_scalar(file.observables, "scalar_dset", H5T_NATIVE_INT, &i);
 
     h5md_create_fixed_data_scalar(p_grp, "custom_parameter", vls_t, &vls_data);
 
@@ -63,13 +60,11 @@ int main(void) {
       h5md_append(pos, r, j+1, (double) j+1);
     }
 
-    status = H5Gclose(grp);
     status = H5Gclose(b_grp);
-    status = H5Gclose(o_grp);
     status = H5Gclose(p_grp);
     status = H5Tclose(vls_t);
 
-    H5Fclose(file);
+    h5md_close_file(file);
 
     H5close();
 
