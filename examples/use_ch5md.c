@@ -14,8 +14,6 @@ int main(void) {
     hid_t vls_t;
     herr_t status;
 
-    h5md_element pos;
-
     int i, j;
     double r[10][3];
     int species[10], dims[1];
