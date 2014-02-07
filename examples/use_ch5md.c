@@ -10,7 +10,8 @@
 
 int main(void) {
     h5md_file file;
-    hid_t b_grp, p_grp;
+    h5md_particles_group beads;
+    hid_t p_grp;
     hid_t vls_t;
     herr_t status;
 
@@ -28,14 +29,15 @@ int main(void) {
 
     file = h5md_create_file("data_use_ch5md.h5", "Pierre de Buyl", NULL, "use_h5md", "N/A");
 
-    b_grp = H5Gcreate(file.particles, "beads", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    beads = h5md_create_particles_group(file, "beads");
+    
     p_grp = H5Gcreate(file.id, "parameters", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     vls_t = H5Tcopy(H5T_C_S1);
     H5Tset_size(vls_t, H5T_VARIABLE);
 
     // Create a time-dependent dataset
     // There is no data yet in "pos"
-    pos = h5md_create_time_data(b_grp, "position", 10, 3, H5T_NATIVE_DOUBLE);
+    beads.position = h5md_create_time_data(beads.group, "position", 10, 3, H5T_NATIVE_DOUBLE);
 
     for (i=0;i<10;i++) {
       r[i][0] = i;
@@ -45,7 +47,7 @@ int main(void) {
 
     // Create a simple fixed-in-time dataset
     // Data is written immediately here
-    h5md_create_fixed_data_simple(b_grp, "species", 1, dims, H5T_NATIVE_INT, species);
+    beads.species = h5md_create_fixed_data_simple(beads.group, "species", 1, dims, H5T_NATIVE_INT, species);
 
     // Create a scalar fixed-in-time dataset
     // Data is written immediately here
@@ -57,10 +59,9 @@ int main(void) {
     // Update r in a loop and write data to the file.
     for (j=0;j<2;j++) {
       for (i=0;i<10;i++) r[i][0] += 0.1*i*i;
-      h5md_append(pos, r, j+1, (double) j+1);
+      h5md_append(beads.position, r, j+1, (double) j+1);
     }
 
-    status = H5Gclose(b_grp);
     status = H5Gclose(p_grp);
     status = H5Tclose(vls_t);
 

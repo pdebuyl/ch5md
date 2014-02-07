@@ -113,6 +113,15 @@ hid_t h5md_open_file (const char *filename)
 
 }
 
+h5md_particles_group h5md_create_particles_group(h5md_file file, const char *name)
+{
+  h5md_particles_group group;
+  
+  group.group = H5Gcreate(file.particles, "beads", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+
+  return group;
+}
+
 h5md_element h5md_create_time_data (hid_t loc, const char *name, int N, int D, hid_t datatype)
 {
 
