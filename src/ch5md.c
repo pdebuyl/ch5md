@@ -7,6 +7,7 @@
 
 #include "hdf5.h"
 #include "ch5md.h"
+#include <string.h>
 
 #define MIN_CHUNK 10
 #define MAX_CHUNK 256
@@ -33,27 +34,37 @@ h5md_file h5md_create_file (const char *filename, const char *author, const char
   status = H5Sclose(s);
 
   s = H5Screate(H5S_SCALAR);
-  t = H5Tcopy(H5T_C_S1);
-  status = H5Tset_size(t, H5T_VARIABLE);
 
   g1 = H5Gcreate(g, "author", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+  t = H5Tcopy(H5T_C_S1);
+  status = H5Tset_size(t, strlen(author));
   a = H5Acreate(g1, "name", t, s, H5P_DEFAULT, H5P_DEFAULT);
-  status = H5Awrite(a, t, &author);
+  status = H5Awrite(a, t, author);
   status = H5Aclose(a);
+  status = H5Tclose(t);
   if (NULL!=author_email) {
+    t = H5Tcopy(H5T_C_S1);
+    status = H5Tset_size(t, strlen(author_email));
     a = H5Acreate(g1, "author_email", t, s, H5P_DEFAULT, H5P_DEFAULT);
-    status = H5Awrite(a, t, &author_email);
+    status = H5Awrite(a, t, author_email);
     status = H5Aclose(a);
+    status = H5Tclose(t);
   }
   status = H5Gclose(g1);
 
   g1 = H5Gcreate(g, "creator", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+  t = H5Tcopy(H5T_C_S1);
+  status = H5Tset_size(t, strlen(creator));
   a = H5Acreate(g1, "name", t, s, H5P_DEFAULT, H5P_DEFAULT);
-  status = H5Awrite(a, t, &creator);
+  status = H5Awrite(a, t, creator);
   status = H5Aclose(a);
+  status = H5Tclose(t);
+  t = H5Tcopy(H5T_C_S1);
+  status = H5Tset_size(t, strlen(creator_version));
   a = H5Acreate(g1, "version", t, s, H5P_DEFAULT, H5P_DEFAULT);
-  status = H5Awrite(a, t, &creator_version);
+  status = H5Awrite(a, t, creator_version);
   status = H5Aclose(a);
+  status = H5Tclose(t);
   status = H5Gclose(g1);
 
   file.particles = H5Gcreate(file.id, "particles", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
