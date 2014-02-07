@@ -1,11 +1,11 @@
 ch5md : Read and write H5MD files in C
 ======================================
 
-Copyright (C) 2013 Pierre de Buyl
+Copyright (C) 2013-2014 Pierre de Buyl
 
 ch5md is a set of C routines to manipulate H5MD files. H5MD is a file format
 specification based on [HDF5](http://www.hdfgroup.org/HDF5/) for storing
-molecular data.
+molecular data, whose development is found at <http://nongnu.org/h5md/>.
 
-pyh5md is developped by Pierre de Buyl and is released under the 3-clause BSD
+ch5md is developped by Pierre de Buyl and is released under the 3-clause BSD
 license that can be found in the file LICENSE.
