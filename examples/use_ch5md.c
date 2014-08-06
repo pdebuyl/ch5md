@@ -8,6 +8,8 @@
 #include "hdf5.h"
 #include "ch5md.h"
 
+#define NPART 16
+
 int main(void) {
     h5md_file file;
     h5md_particles_group beads;
@@ -15,8 +17,8 @@ int main(void) {
     herr_t status;
 
     int i, j;
-    double r[10][3];
-    int species[10], dims[1];
+    double r[NPART][3];
+    int species[NPART], dims[1];
 
     char *vls_data;
 
@@ -33,13 +35,13 @@ int main(void) {
 
     // Create a time-dependent dataset
     // There is no data yet in "pos"
-    beads.position = h5md_create_time_data(beads.group, "position", 10, 3, H5T_NATIVE_DOUBLE);
+    beads.position = h5md_create_time_data(beads.group, "position", NPART, 3, H5T_NATIVE_DOUBLE);
 
-    for (i=0;i<10;i++) {
+    for (i=0;i<NPART;i++) {
       r[i][0] = i;
       species[i] = 1;
     }
-    dims[0] = 10;
+    dims[0] = NPART;
 
     // Create a simple fixed-in-time dataset
     // Data is written immediately here
@@ -54,7 +56,7 @@ int main(void) {
 
     // Update r in a loop and write data to the file.
     for (j=0;j<2;j++) {
-      for (i=0;i<10;i++) r[i][0] += 0.1*i*i;
+      for (i=0;i<NPART;i++) r[i][0] += 0.1*i*i;
       h5md_append(beads.position, r, j+1, (double) j+1);
     }
 
