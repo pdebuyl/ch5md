@@ -40,7 +40,7 @@ int main(void) {
     // There is no data yet in "pos"
     dims[0] = NPART;
     dims[1] = 3;
-    beads.position = h5md_create_time_data(beads.group, "position", 2, dims, H5T_NATIVE_DOUBLE);
+    beads.position = h5md_create_time_data(beads.group, "position", 2, dims, H5T_NATIVE_DOUBLE, NULL);
 
     for (i=0;i<NPART;i++) {
       r[i][0] = i;

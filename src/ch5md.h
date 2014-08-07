@@ -50,7 +50,7 @@ h5md_file h5md_create_file (const char *filename, const char *author, const char
 int h5md_close_file(h5md_file file);
 hid_t h5md_open_file (const char *filename);
 h5md_particles_group h5md_create_particles_group(h5md_file file, const char *name);
-h5md_element h5md_create_time_data(hid_t loc, const char *name, int rank, int int_dims[], hid_t datatype);
+h5md_element h5md_create_time_data(hid_t loc, const char *name, int rank, int int_dims[], hid_t datatype, h5md_element *link);
 h5md_element h5md_create_fixed_data_simple(hid_t loc, const char *name, int rank, int int_dims[], hid_t datatype, void *data);
 h5md_element h5md_create_fixed_data_scalar(hid_t loc, const char *name, hid_t datatype, void *data);
 int h5md_append(h5md_element e, void *data, int step, double time);
