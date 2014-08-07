@@ -27,7 +27,7 @@ typedef struct h5md_element_struct {
 typedef struct h5md_particles_group_struct {
   hid_t group;
   h5md_element position;
-  h5md_element box;
+  hid_t box;
   h5md_element image;
   h5md_element velocity;
   h5md_element force;

@@ -20,6 +20,8 @@ int main(void) {
     double r[NPART][3];
     int species[NPART], dims[1];
 
+    char *boundary[] = {"periodic", "periodic", "none"};
+
     char *vls_data;
 
     vls_data = "Custom parameter value";
@@ -42,6 +44,7 @@ int main(void) {
       species[i] = 1;
     }
     dims[0] = NPART;
+    beads.box = h5md_create_box(beads.group, 3, boundary);
 
     // Create a simple fixed-in-time dataset
     // Data is written immediately here

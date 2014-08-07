@@ -346,3 +346,46 @@ int h5md_append(h5md_element e, void *data, int step, double time) {
 
   return 0;
 }
+
+hid_t h5md_create_box(hid_t loc, int dim, const char *boundary[]) {
+  hid_t box_group;
+
+  hid_t spc, att, t;
+  hsize_t dims[1];
+  herr_t status;
+  int i;
+  size_t boundary_length;
+
+  // Create box group
+  box_group = H5Gcreate(loc, "box", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+
+  // Create dimension attribute
+  spc = H5Screate(H5S_SCALAR);
+  att = H5Acreate(box_group, "dimension", H5T_NATIVE_INT, spc, H5P_DEFAULT, H5P_DEFAULT);
+  status = H5Awrite(att, H5T_NATIVE_INT, &dim);
+  status = H5Aclose(att);
+  status = H5Sclose(spc);
+
+  // Compute the size of the string type for boundary
+  dims[0] = dim;
+  boundary_length = -1;
+  for (i=0; i<dim; i++) {
+    if (sizeof(boundary[i])>boundary_length) {
+      boundary_length=strlen(boundary[i]);
+    }
+  }
+  // Create boundary attribute
+  t = H5Tcopy(H5T_C_S1);
+  status = H5Tset_size(t, boundary_length);
+  spc = H5Screate_simple(1, dims, NULL);
+  att = H5Acreate(box_group, "boundary", t, spc, H5P_DEFAULT, H5P_DEFAULT);
+  status = H5Awrite(att, t, boundary);
+  status = H5Aclose(att);
+  status = H5Sclose(spc);
+  status = H5Tclose(t);
+
+  // Create edges
+  // Check if the box is time-dependent or not
+
+  return box_group;
+}
