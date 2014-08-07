@@ -174,9 +174,9 @@ h5md_element h5md_create_time_data(hid_t loc, const char *name, int rank, int in
   H5Pclose(plist);
   H5Sclose(spc);
 
-  spc = H5Screate_simple( 3 , dims, max_dims) ;
+  spc = H5Screate_simple( rank+1 , dims, max_dims) ;
   plist = H5Pcreate(H5P_DATASET_CREATE);
-  status = H5Pset_chunk(plist, 3, chunks);
+  status = H5Pset_chunk(plist, rank+1, chunks);
   td.value = H5Dcreate(td.group, "value", datatype, spc, H5P_DEFAULT, plist, H5P_DEFAULT);
   H5Pclose(plist);
   status = H5Sclose(spc);
