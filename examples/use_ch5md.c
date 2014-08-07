@@ -47,8 +47,8 @@ int main(void) {
       species[i] = 1;
     }
     dims[0] = NPART;
-    beads.box = h5md_create_box(beads.group, 3, boundary);
-    beads.box_edges = h5md_create_box_edges(beads.group, false, 3, edges);
+
+    h5md_create_box(beads, 3, boundary, true, edges);
 
     // Create a simple fixed-in-time dataset
     // Data is written immediately here
