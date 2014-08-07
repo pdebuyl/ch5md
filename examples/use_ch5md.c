@@ -7,18 +7,21 @@
 
 #include "hdf5.h"
 #include "ch5md.h"
+#include "math.h"
 
 #define NPART 16
 
 int main(void) {
     h5md_file file;
     h5md_particles_group beads;
+    h5md_element obs_sin;
     hid_t vls_t;
     herr_t status;
 
     int i, j;
     double r[NPART][3];
     int species[NPART], dims[2];
+    double mysin;
 
     const char *boundary[] = {"periodic", "periodic", "none"};
     double edges[3] = {25, 25, 15};
@@ -57,6 +60,7 @@ int main(void) {
     // Data is written immediately here
     i = 12345;
     h5md_create_fixed_data_scalar(file.observables, "scalar_dset", H5T_NATIVE_INT, &i);
+    obs_sin = h5md_create_time_data(file.observables, "sin", 0, dims, H5T_NATIVE_DOUBLE, NULL);
 
     // Create a scalar parameter
     // Data is written immediately and is here a variable length string
@@ -67,6 +71,8 @@ int main(void) {
       for (i=0;i<NPART;i++) r[i][0] += 0.1*i*i;
       h5md_append(beads.position, r, j+1, (double) j+1);
       h5md_append(beads.box_edges, edges, j+1, (double) j+1);
+      mysin = sin((double) j);
+      h5md_append(obs_sin, &mysin, j+1, (double) j+1);
     }
 
     status = H5Tclose(vls_t);
