@@ -280,6 +280,9 @@ int h5md_append(h5md_element e, void *data, int step, double time) {
   hsize_t dims[H5S_MAX_RANK], maxdims[H5S_MAX_RANK];
   hsize_t start[H5S_MAX_RANK], count[H5S_MAX_RANK];
 
+  // If not a time-dependent H5MD element, do nothing
+  if (!e.is_time) return 0;
+
   h5md_extend_by_one(e.step, dims);
 
   // Define hyperslab selection
