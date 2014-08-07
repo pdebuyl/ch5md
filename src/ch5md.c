@@ -158,11 +158,7 @@ h5md_element h5md_create_time_data(hid_t loc, const char *name, int rank, int in
   if (MAX_CHUNK<int_dims[0]/4) {
     chunks[1] = MAX_CHUNK;
   } else {
-    if (int_dims[0]/4>MIN_CHUNK) {
-      chunks[1] = int_dims[0]/4;
-    } else {
-      chunks[1] = MIN_CHUNK;
-    }
+    chunks[1] = int_dims[0];
   }
   for (i=1; i<rank; i++) {
     chunks[i+1]=int_dims[i];
