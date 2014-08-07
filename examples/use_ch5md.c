@@ -59,6 +59,8 @@ int main(void) {
     i = 12345;
     h5md_create_fixed_data_scalar(file.observables, "scalar_dset", H5T_NATIVE_INT, &i);
 
+    // Create a scalar parameter
+    // Data is written immediately and is here a variable length string
     h5md_create_fixed_data_scalar(file.parameters, "custom_parameter", vls_t, &vls_data);
 
     // Update r in a loop and write data to the file.
