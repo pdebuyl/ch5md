@@ -18,9 +18,10 @@ int main(void) {
 
     int i, j;
     double r[NPART][3];
-    int species[NPART], dims[1];
+    int species[NPART], dims[2];
 
-    char *boundary[] = {"periodic", "periodic", "none"};
+    const char *boundary[] = {"periodic", "periodic", "none"};
+    double edges[3] = {25, 25, 15};
 
     char *vls_data;
 
@@ -37,7 +38,9 @@ int main(void) {
 
     // Create a time-dependent dataset
     // There is no data yet in "pos"
-    beads.position = h5md_create_time_data(beads.group, "position", NPART, 3, H5T_NATIVE_DOUBLE);
+    dims[0] = NPART;
+    dims[1] = 3;
+    beads.position = h5md_create_time_data(beads.group, "position", 2, dims, H5T_NATIVE_DOUBLE);
 
     for (i=0;i<NPART;i++) {
       r[i][0] = i;
@@ -45,6 +48,7 @@ int main(void) {
     }
     dims[0] = NPART;
     beads.box = h5md_create_box(beads.group, 3, boundary);
+    beads.box_edges = h5md_create_box_edges(beads.group, false, 3, edges);
 
     // Create a simple fixed-in-time dataset
     // Data is written immediately here

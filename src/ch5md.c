@@ -11,6 +11,7 @@
 
 #define MIN_CHUNK 10
 #define MAX_CHUNK 256
+#define MAX_RANK 5
 
 h5md_file h5md_create_file (const char *filename, const char *author, const char *author_email, const char *creator, const char *creator_version)
 {
@@ -135,35 +136,37 @@ h5md_particles_group h5md_create_particles_group(h5md_file file, const char *nam
   return group;
 }
 
-h5md_element h5md_create_time_data (hid_t loc, const char *name, int N, int D, hid_t datatype)
+h5md_element h5md_create_time_data(hid_t loc, const char *name, int rank, int int_dims[], hid_t datatype)
 {
 
   h5md_element td;
 
   hid_t spc, plist;
-  hsize_t dims[3], max_dims[3], chunks[3];
+  hsize_t dims[MAX_RANK], max_dims[MAX_RANK], chunks[MAX_RANK];
   herr_t status;
 
-  int tmp;
+  int i, tmp;
 
   dims[0] = 0 ;
-  dims[1] = N ;
-  dims[2] = D ;
   max_dims[0] = H5S_UNLIMITED ;
-  max_dims[1] = N ;
-  max_dims[2] = D ;
-  chunks[0] = 10 ;
+  for (i=0; i<rank; i++) {
+    dims[i+1] = int_dims[i];
+    max_dims[i+1] = int_dims[i];
+  }
+  chunks[0] = 1 ;
   tmp = 256;
-  if (MAX_CHUNK<N/4) {
+  if (MAX_CHUNK<int_dims[0]/4) {
     chunks[1] = MAX_CHUNK;
   } else {
-    if (N/4>MIN_CHUNK) {
-      chunks[1] = N/4;
+    if (int_dims[0]/4>MIN_CHUNK) {
+      chunks[1] = int_dims[0]/4;
     } else {
       chunks[1] = MIN_CHUNK;
     }
   }
-  chunks[2] = D ;
+  for (i=1; i<rank; i++) {
+    chunks[i+1]=int_dims[i];
+  }
 
   td.group = H5Gcreate(loc, name, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 
@@ -388,4 +391,22 @@ hid_t h5md_create_box(hid_t loc, int dim, const char *boundary[]) {
   // Check if the box is time-dependent or not
 
   return box_group;
+}
+
+h5md_element h5md_create_box_edges(hid_t loc, bool is_time, int dim, double value[]) {
+  h5md_element edges;
+
+  herr_t status;
+  int dims[1];
+
+  dims[0]=dim;
+  if (is_time) {
+    edges = h5md_create_time_data(loc, "box/edges", 1, dims, H5T_NATIVE_DOUBLE);
+  } else {
+    if (NULL!=value) {
+      edges = h5md_create_fixed_data_simple(loc, "box/edges", 1, dims, H5T_NATIVE_DOUBLE, value);
+    }
+  }
+
+  return edges;
 }
