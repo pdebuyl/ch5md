@@ -48,7 +48,7 @@ int main(void) {
     }
     dims[0] = NPART;
 
-    h5md_create_box(beads, 3, boundary, true, edges);
+    h5md_create_box(&beads, 3, boundary, true, edges);
 
     // Create a simple fixed-in-time dataset
     // Data is written immediately here
@@ -65,6 +65,7 @@ int main(void) {
     for (j=0;j<2;j++) {
       for (i=0;i<NPART;i++) r[i][0] += 0.1*i*i;
       h5md_append(beads.position, r, j+1, (double) j+1);
+      h5md_append(beads.box_edges, edges, j+1, (double) j+1);
     }
 
     status = H5Tclose(vls_t);
