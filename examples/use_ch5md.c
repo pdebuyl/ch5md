@@ -46,7 +46,6 @@ int main(void) {
       r[i][0] = i;
       species[i] = 1;
     }
-    dims[0] = NPART;
 
     h5md_create_box(&beads, 3, boundary, true, edges);
 
