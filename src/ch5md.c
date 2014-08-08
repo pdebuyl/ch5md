@@ -358,14 +358,15 @@ int h5md_append(h5md_element e, void *data, int step, double time) {
   return 0;
 }
 
-int h5md_create_box(h5md_particles_group *group, int dim, const char *boundary[], bool is_time, double value[])
+int h5md_create_box(h5md_particles_group *group, int dim, char *boundary[], bool is_time, double value[])
 {
   hid_t spc, att, t;
   hsize_t dims[1];
   int int_dims[1];
   herr_t status;
   int i;
-  size_t boundary_length;
+  size_t boundary_length, tmp;
+  char **tmp_boundary;
 
   // Create box group
   group->box = H5Gcreate(group->group, "box", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
@@ -379,18 +380,27 @@ int h5md_create_box(h5md_particles_group *group, int dim, const char *boundary[]
 
   // Compute the size of the string type for boundary
   dims[0] = dim;
-  boundary_length = -1;
+  boundary_length=0;
   for (i=0; i<dim; i++) {
-    if (sizeof(boundary[i])>boundary_length) {
-      boundary_length=strlen(boundary[i]);
+    tmp = strlen(boundary[i])+1;
+    if (tmp>boundary_length) {
+      boundary_length=tmp;
     }
+  }
+  tmp_boundary = malloc(dim*sizeof(char*));
+  tmp_boundary[0] = malloc(dim*sizeof(char)*boundary_length);
+  for (i=1; i<dim; i++) {
+    tmp_boundary[i] = (tmp_boundary[0]+i*boundary_length);
+  }
+  for (i=0; i<dim; i++) {
+    strcpy(tmp_boundary[i], boundary[i]);
   }
   // Create boundary attribute
   t = H5Tcopy(H5T_C_S1);
   status = H5Tset_size(t, boundary_length);
   spc = H5Screate_simple(1, dims, NULL);
   att = H5Acreate(group->box, "boundary", t, spc, H5P_DEFAULT, H5P_DEFAULT);
-  status = H5Awrite(att, t, boundary);
+  status = H5Awrite(att, t, tmp_boundary[0]);
   status = H5Aclose(att);
   status = H5Sclose(spc);
   status = H5Tclose(t);

@@ -8,6 +8,7 @@
 #include "hdf5.h"
 #include "ch5md.h"
 #include "math.h"
+#include "stdlib.h"
 
 #define NPART 16
 
@@ -23,7 +24,8 @@ int main(void) {
     int species[NPART], dims[2];
     double mysin;
 
-    const char *boundary[] = {"periodic", "periodic", "none"};
+    char *boundary[] = {"periodic", "periodic", "none"};
+
     double edges[3] = {25, 25, 15};
 
     char *vls_data;
