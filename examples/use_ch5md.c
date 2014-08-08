@@ -32,7 +32,7 @@ int main(void) {
 
     H5open();
 
-    file = h5md_create_file("data_use_ch5md.h5", "Pierre de Buyl", NULL, "use_h5md", "N/A");
+    file = h5md_create_file("data_use_ch5md.h5", "Pierre de Buyl", NULL, "ch5md.use_h5md", "N/A");
 
     beads = h5md_create_particles_group(file, "beads");
     
