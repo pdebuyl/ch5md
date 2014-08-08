@@ -8,6 +8,7 @@
 #include "hdf5.h"
 #include "ch5md.h"
 #include <string.h>
+#include <stdlib.h>
 
 #define MIN_CHUNK 10
 #define MAX_CHUNK 256
@@ -401,6 +402,8 @@ int h5md_create_box(h5md_particles_group *group, int dim, char *boundary[], bool
   spc = H5Screate_simple(1, dims, NULL);
   att = H5Acreate(group->box, "boundary", t, spc, H5P_DEFAULT, H5P_DEFAULT);
   status = H5Awrite(att, t, tmp_boundary[0]);
+  free(tmp_boundary[0]);
+  free(tmp_boundary);
   status = H5Aclose(att);
   status = H5Sclose(spc);
   status = H5Tclose(t);
