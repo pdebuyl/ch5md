@@ -367,7 +367,7 @@ int h5md_create_box(h5md_particles_group *group, int dim, char *boundary[], bool
   herr_t status;
   int i;
   size_t boundary_length, tmp;
-  char **tmp_boundary;
+  char *tmp_boundary;
 
   // Create box group
   group->box = H5Gcreate(group->group, "box", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
@@ -388,21 +388,16 @@ int h5md_create_box(h5md_particles_group *group, int dim, char *boundary[], bool
       boundary_length=tmp;
     }
   }
-  tmp_boundary = malloc(dim*sizeof(char*));
-  tmp_boundary[0] = malloc(dim*sizeof(char)*boundary_length);
-  for (i=1; i<dim; i++) {
-    tmp_boundary[i] = (tmp_boundary[0]+i*boundary_length);
-  }
+  tmp_boundary = malloc(dim*sizeof(char)*boundary_length);
   for (i=0; i<dim; i++) {
-    strcpy(tmp_boundary[i], boundary[i]);
+    strcpy((tmp_boundary+i*boundary_length), boundary[i]);
   }
   // Create boundary attribute
   t = H5Tcopy(H5T_C_S1);
   status = H5Tset_size(t, boundary_length);
   spc = H5Screate_simple(1, dims, NULL);
   att = H5Acreate(group->box, "boundary", t, spc, H5P_DEFAULT, H5P_DEFAULT);
-  status = H5Awrite(att, t, tmp_boundary[0]);
-  free(tmp_boundary[0]);
+  status = H5Awrite(att, t, tmp_boundary);
   free(tmp_boundary);
   status = H5Aclose(att);
   status = H5Sclose(spc);
