@@ -12,3 +12,7 @@ license that can be found in the file LICENSE.
 
 The example file `use_ch5md.c` can be used as a starting point to use the
 library.
+
+    git clone https://github.com/pdebuyl/ch5md.git
+    cd ch5md/examples
+    make
