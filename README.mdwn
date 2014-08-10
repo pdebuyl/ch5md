@@ -16,3 +16,5 @@ library.
     git clone https://github.com/pdebuyl/ch5md.git
     cd ch5md/examples
     make
+
+The executable `use_h5md` procudes a H5MD file: `data_use_ch5md.h5`.
