@@ -7,6 +7,11 @@
 
 #ifndef CH5MD_H
 #define CH5MD_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "hdf5.h"
 #include <stdbool.h>
 
@@ -55,5 +60,9 @@ h5md_element h5md_create_fixed_data_simple(hid_t loc, const char *name, int rank
 h5md_element h5md_create_fixed_data_scalar(hid_t loc, const char *name, hid_t datatype, void *data);
 int h5md_append(h5md_element e, void *data, int step, double time);
 int h5md_create_box(h5md_particles_group *group, int dim, char *boundary[], bool is_time, double value[]);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
