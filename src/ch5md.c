@@ -132,7 +132,7 @@ h5md_particles_group h5md_create_particles_group(h5md_file file, const char *nam
 {
   h5md_particles_group group;
   
-  group.group = H5Gcreate(file.particles, "beads", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+  group.group = H5Gcreate(file.particles, name, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 
   return group;
 }
