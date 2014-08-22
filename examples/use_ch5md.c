@@ -52,7 +52,7 @@ int main(void) {
       species[i] = 1;
     }
 
-    h5md_create_box(&beads, 3, boundary, true, edges);
+    h5md_create_box(&beads, 3, boundary, true, edges, &beads.position);
 
     // Create a simple fixed-in-time dataset
     // Data is written immediately here
