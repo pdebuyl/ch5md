@@ -79,7 +79,7 @@ int main(void) {
 
     status = H5Tclose(vls_t);
 
-    h5md_close_time_data(beads.position);
+    h5md_close_element(beads.position);
     h5md_close_file(file);
 
     H5close();

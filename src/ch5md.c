@@ -196,7 +196,7 @@ h5md_element h5md_create_time_data(hid_t loc, const char *name, int rank, int in
 
 }
 
-int h5md_close_time_data(h5md_element e)
+int h5md_close_element(h5md_element e)
 {
   herr_t status;
 
