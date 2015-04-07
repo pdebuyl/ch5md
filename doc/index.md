@@ -1,7 +1,7 @@
 ch5md documentation {#mainpage}
 ===================
 
-Copyright (C) 2013-2014 Pierre de Buyl
+Copyright (C) 2013-2015 Pierre de Buyl
 
 Welcome to the documentation of ch5md!
 

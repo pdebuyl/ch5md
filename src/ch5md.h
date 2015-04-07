@@ -1,5 +1,5 @@
 /* This file is part of ch5md
- * Copyright (C) 2013-2014 Pierre de Buyl
+ * Copyright (C) 2013-2015 Pierre de Buyl
  * All rights reserved.
  *
  * This software may be modified and distributed under the terms

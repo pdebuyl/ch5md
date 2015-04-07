@@ -1,7 +1,7 @@
 ch5md : Read and write H5MD files in C
 ======================================
 
-Copyright (C) 2013-2014 Pierre de Buyl
+Copyright (C) 2013-2015 Pierre de Buyl
 
 ch5md is a set of C routines to manipulate H5MD files. H5MD is a file format
 specification based on [HDF5](http://www.hdfgroup.org/HDF5/) for storing
