@@ -419,3 +419,26 @@ int h5md_create_box(h5md_particles_group *group, int dim, char *boundary[], bool
 
   return 0;
 }
+
+int h5md_write_string_attribute(hid_t loc, const char *obj_name,
+    const char *att_name, const char *value)
+{
+  hid_t obj;
+  hid_t s, t, a;
+  herr_t status;
+
+  obj = H5Oopen(loc, obj_name, H5P_DEFAULT);
+
+  t = H5Tcopy(H5T_C_S1);
+  status = H5Tset_size(t, strlen(value));
+  s = H5Screate(H5S_SCALAR);
+  a = H5Acreate(obj, att_name, t, s, H5P_DEFAULT, H5P_DEFAULT);
+  status = H5Awrite(a, t, value);
+  status = H5Aclose(a);
+  status = H5Sclose(s);
+  status = H5Tclose(t);
+
+  status = H5Oclose(obj);
+
+  return 0;
+}
