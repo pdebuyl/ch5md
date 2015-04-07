@@ -41,6 +41,7 @@ typedef struct h5md_particles_group_struct {
   h5md_element mass;
   h5md_element species;
   h5md_element id;
+  h5md_element charge;
   int local_size_max;
 } h5md_particles_group;
 
