@@ -9,6 +9,7 @@ molecular data, whose development is found at <http://nongnu.org/h5md/>.
 
 ch5md is developed by Pierre de Buyl and is released under the 3-clause BSD
 license that can be found in the file LICENSE.
+Contributing authors are found in CONTRIBUTORS
 
 The example file `use_ch5md.c` can be used as a starting point to use the
 library.
